@@ -1,1 +1,26 @@
+# Environments
 .env
+venv/
+env/
+ENV/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Django
+db.sqlite3
+db.sqlite3-journal
+media/
+staticfiles/
+
+# Logs
+*.log
+
+# OS & IDEs
+.DS_Store
+.vscode/
+.idea/
+*.swp
