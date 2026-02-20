@@ -1,10 +1,11 @@
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
-from .serializers import UserRegisterSerializer, UserLoginSerializer
+from .serializers import UserRegisterSerializer, UserLoginSerializer, UserProfileSerializer
 from django.contrib.auth import authenticate
-from .renderers import UserRenderer
+from accounts.renderers import UserRenderer
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.permissions import IsAuthenticated
 
 # function to generate tokens 
 def get_tokens_for_user(user):
@@ -43,8 +44,8 @@ class UserLoginView(APIView):
                      email= serializer.data.get('email')
                      password=serializer.data.get('password')
                      user = authenticate(email=email, password=password)
-                     token= get_tokens_for_user(user=user)
                      if user is not None:
+                            token= get_tokens_for_user(user=user)
                             return Response({
                                    'message': 'User Login Successfully',
                                    'data': serializer.data,
@@ -52,9 +53,18 @@ class UserLoginView(APIView):
                             }, status=status.HTTP_200_OK)
                      else:
                       return Response(
-                            {'errors':{'non_field_error':['Email or Password in not valid']}},
+                            {'errors':{'non_field_errors':['Email or Password in not valid']}},
                               status=status.HTTP_404_NOT_FOUND)
                      
               return Response( serializer.errors ,status=status.HTTP_404_NOT_FOUND)       
                      
-                     
+
+# get user profile     
+class UserProfileView(APIView):
+       renderer_classes=[UserRenderer]
+       permission_classes=[IsAuthenticated]
+       def get(self, request, format=None):
+             serializer= UserProfileSerializer(request.user)
+             return Response({'data': serializer.data}, status=status.HTTP_200_OK)
+
+                       
