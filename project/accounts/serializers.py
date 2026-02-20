@@ -79,11 +79,11 @@ class SendResetPasswordEmailSerializer(serializers.Serializer):
             link='http://localhost:3000/api/user/sent-rest-password-email/'+uid+'/'+token
             print("link", link )
             # send email function call
-            data={
-                'subject': 'Reset Your Password',
-                'body': f"Click link to reset password: {link}",
-                'to_email': user.email
-            }
+            data = {
+                    'subject': 'Reset Your Password',
+                    'reset_link': link,
+                    'email_to': user.email
+                }
 
             Utils.send_email(data)
         else:    
