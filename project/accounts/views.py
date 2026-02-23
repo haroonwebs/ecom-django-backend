@@ -3,7 +3,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 from .serializers import UserRegisterSerializer, UserLoginSerializer, UserProfileSerializer, UpdateUserPasswordSerializer, SendResetPasswordEmailSerializer, ResetPasswordSerializer
 from django.contrib.auth import authenticate
-from accounts.renderers import UserRenderer
+from project.renderers import DataRenderer
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
 
@@ -19,7 +19,7 @@ def get_tokens_for_user(user):
 
 # user RegisterUserView
 class RegisterUserView(APIView):
-    renderer_classes=[UserRenderer]
+    renderer_classes=[DataRenderer]
     def post(self, request, format=None):
         serializer = UserRegisterSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
@@ -35,7 +35,7 @@ class RegisterUserView(APIView):
 
 
 class UserLoginView(APIView):
-       renderer_classes = [UserRenderer]
+       renderer_classes = [DataRenderer]
        def post(sefl, request, format=None):
               serializer= UserLoginSerializer(data=request.data)
               if serializer.is_valid(raise_exception=True):
@@ -60,7 +60,7 @@ class UserLoginView(APIView):
 
 # get user profile     
 class UserProfileView(APIView):
-       renderer_classes=[UserRenderer]
+       renderer_classes=[DataRenderer]
        permission_classes=[IsAuthenticated]
        def get(self, request, format=None):
              serializer= UserProfileSerializer(request.user)
@@ -70,7 +70,7 @@ class UserProfileView(APIView):
 
 class UpdateUserPasswordView(APIView):
        permission_classes=[IsAuthenticated]
-       renderer_classes=[UserRenderer]
+       renderer_classes=[DataRenderer]
        def patch(self, request, format=None):
              print('data', request.data)
              serializer= UpdateUserPasswordSerializer(data=request.data, context={'user': request.user})
