@@ -46,6 +46,8 @@ class CreateProductView(APIView):
 
 # update product view    
 class UpdateProductView(APIView):
+    permission_classes=[IsAdminUser]
+    renderer_classes=[DataRenderer]
     def patch(self, request, pk ,format=None):
         try:
             product=Product.objects.get(pk=pk)
@@ -81,6 +83,7 @@ class GetSingleProductView(APIView):
 
 # delete product
 class DeleteProductView(APIView):
+    permission_classes=[IsAdminUser]
     renderer_classes=[DataRenderer]
     def delete(self, request, pk ,format=None):
         try:
