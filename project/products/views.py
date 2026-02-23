@@ -69,7 +69,6 @@ class UpdateProductView(APIView):
 class GetSingleProductView(APIView):
     renderer_classes=[DataRenderer]
     def get(self, request, pk ,format=None):
-        product=''
         try:
             product=Product.objects.get(pk=pk)
         except Product.DoesNotExist:
