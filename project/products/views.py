@@ -10,8 +10,8 @@ from rest_framework.permissions import IsAdminUser
 class ProductListView(APIView):
     renderer_classes=[DataRenderer]
     def get(self, request, format=None):
-        page = int(request.GET.get('page', 1))
-        limit = int(request.GET.get('per_page', 10))
+        page = int(request.GET.get('page'))
+        limit = int(request.GET.get('limit'))
 
         start = (page - 1) * limit
         end = start + limit
