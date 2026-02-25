@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     "accounts",
     'products',
-    'categories'
+    'categories',
+    'orders'
 ]
 
 AUTH_USER_MODEL = "accounts.User"
