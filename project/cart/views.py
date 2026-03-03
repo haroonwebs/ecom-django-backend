@@ -37,6 +37,18 @@ class AddToCartView(APIView):
         else:
             cart_item.quantity = quantity
 
+        if quantity > product.stock:
+            return Response(
+                {"error": "Not enough stock available"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        if cart_item.quantity + quantity > product.stock:
+            return Response(
+                {"error": "Stock limit exceeded"},
+                status=status.HTTP_400_BAD_REQUEST
+            )    
+
         cart_item.save()
 
         return Response(
@@ -73,7 +85,4 @@ class RemoveItemFromCart(APIView):
             {"message": "Item removed from cart"},
             status=status.HTTP_200_OK
         )
-
-
-
 
