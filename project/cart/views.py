@@ -2,12 +2,16 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
+from .serializer import CartItemSerializer
+
+from project.renderers import DataRenderer
 from .models import Cart, CartItem
 from products.models import Product
 
 # Create your views here.
 
 class AddToCartView(APIView):
+    renderer_classes=[DataRenderer]
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
@@ -61,6 +65,7 @@ class AddToCartView(APIView):
 # remove items from the cart       
 
 class RemoveItemFromCart(APIView):
+    renderer_classes=[DataRenderer]
     permission_classes = [IsAuthenticated]
 
     def delete(self, request):
@@ -86,3 +91,26 @@ class RemoveItemFromCart(APIView):
             status=status.HTTP_200_OK
         )
 
+
+class ListCartItems(APIView):
+    renderer_classes=[DataRenderer]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+
+        try:
+            cart = Cart.objects.get(user=user)
+        except Cart.DoesNotExist:
+            return Response(
+                {"error": "Cart is Empty"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+         
+        cart_items = CartItem.objects.filter(cart=cart)
+        serializer = CartItemSerializer(cart_items, many=True)
+
+        return Response({
+                'message':'Product updated Successfully',
+                'data': serializer.data
+            }, status=status.HTTP_200_OK)
