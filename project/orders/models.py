@@ -35,7 +35,7 @@ class Order(models.Model):
 
 
     def __str__(self):
-        return f"order #{self.Order.id} - {self.user.email}"
+        return f"order #{self.id} - {self.user.email}"
     
 
    
