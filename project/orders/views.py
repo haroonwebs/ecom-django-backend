@@ -65,7 +65,7 @@ class CreateOrderView(APIView):
             {
                 "message": "Order placed successfully",
                 "order_id": order.id,
-                "total_price": total_price
+                "total_price": str(total_price)
             },
             status=status.HTTP_201_CREATED
         )
